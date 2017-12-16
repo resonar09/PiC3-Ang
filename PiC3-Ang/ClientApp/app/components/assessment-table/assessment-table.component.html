@@ -1,0 +1,50 @@
+
+<div *ngIf="!isLoading" class="row">
+    <div class="col-md-8 col-sm"></div>
+    <div class="col-md-4 col-sm-12" ><input type="text" class="form-control  mt-1" placeholder="Search..." [(ngModel)]="filteredStatus" />
+</div>
+</div>
+<div *ngIf="isLoading" class="text-center mt-3"><i class="fa fa-spinner fa-pulse fa-3x" aria-hidden="true"></i></div>
+<table id="assessments" class="table table-hover sortable" width="100%">
+    <thead *ngIf="!isLoading" class="table-header">
+        <tr>
+            <th scope="col" class="par-row-start" (click)="sort('clientName')">
+            Client
+                <i class="fa" [ngClass]="{'fa-sort': column != 'clientName', 'fa-sort-asc': (column == 'clientName' && isDesc), 'fa-sort-desc': (column == 'clientName' && !isDesc) }" aria-hidden="true"> </i>
+            </th>
+            <th scope="col"  (click)="sort('assessment')">
+            Assessment
+                <i class="fa" [ngClass]="{'fa-sort': column != 'assessment', 'fa-sort-asc': (column == 'assessment' && isDesc), 'fa-sort-desc': (column == 'assessment' && !isDesc) }" aria-hidden="true"> </i>
+            </th>
+            <th scope="col" class="d-none-off d-lg-block-off"   (click)="sort('lastUpdated')">
+            Updated
+                <i class="fa" [ngClass]="{'fa-sort': column != 'lastUpdated', 'fa-sort-asc': (column == 'lastUpdated' && isDesc), 'fa-sort-desc': (column == 'lastUpdated' && !isDesc) }" aria-hidden="true"> </i>
+            </th>
+            <th scope="col" class="d-none d-lg-block" (click)="sort('status')">
+                Status
+                <i class="fa" [ngClass]="{'fa-sort': column != 'status', 'fa-sort-asc': (column == 'status' && isDesc), 'fa-sort-desc': (column == 'status' && !isDesc) }" aria-hidden="true"> </i>
+            </th>
+            <th scope="col" class="par-row-end">             
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let clientAssessment of clientAssessments | filter:filteredStatus:'status' | orderBy: {property: column, direction: direction}">
+            <tr class="par-table-row" *ngIf="clientAssessments">
+                <td  [ngClass]="clientAssessment.completed ? 'par-row-start-completed' : 'par-row-start-notcompleted'" class="par-row-start align-middle" scope="row"> <!--style="border-left:red solid 5px;"-->
+                    <strong class="par-client-text">{{clientAssessment.clientName}}</strong>
+                </td>
+                <td class="align-middle">{{clientAssessment.assessment}}</td>
+                <td class="align-middle">{{clientAssessment.lastUpdated | date}}</td>
+                <td class="align-middle d-none d-lg-block">{{clientAssessment.status}}</td>
+                <td class="par-row-end align-middle">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    <span class="par-command-text">Run Report</span>
+                    <i class="fa fa-search ml-2" aria-hidden="true"></i>
+                    <span class="par-command-text">View Responses</span>
+
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
